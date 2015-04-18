@@ -41,7 +41,7 @@ public:
 	int getSize() { return size; }
 	int getCapacity() { return capacity; }
 	// Set Functions
-	bool setCapacity(int newCapacity);
+	void setCapacity(const int newCapacity);
 	// Overloaded Operators
 	template <class U>
 	friend std::ostream& operator<<(std::ostream& out, Stack<U>& rhs);
@@ -76,9 +76,13 @@ template <class T>
 Stack<T>::Stack(const Stack & newStack) {
 	capacity = newStack->capacity;
 	size = newStack->size;
-	data = new T[capacity];
-	for (int i = 0; i < size; ++i)
-		data[i] = newStack.data[i];
+	if (size > 0) {
+		data = new T[capacity];
+		for (int i = 0; i < size; ++i)
+			data[i] = newStack.data[i];
+	}
+	else
+		data = NULL;
 }
 
 // Essential Functions
@@ -98,6 +102,25 @@ void Stack<T>::push(const T newData) {
 		this->grow();
 	}
 	data[size++] = newData;
+}
+
+// Set Functions
+template <class T>
+void Stack<T>::setCapacity(const int newCapacity) {
+	T * temp = new T[newCapacity];
+	// Copy the old stack into the new one
+	int copying = 0;
+	if (size > newCapacity)
+		copying = newCapacity;
+	else
+		copying = size;
+	for (int i = 0; i < copying; ++i)
+		temp[i] = data[i];
+	// Delete the old stack
+	delete[] data;
+	// Make data point to the new stack
+	data = temp;
+	capacity = newCapacity;
 }
 
 // Overloaded Operators
