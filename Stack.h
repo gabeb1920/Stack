@@ -107,6 +107,7 @@ void Stack<T>::push(const T newData) {
 // Set Functions
 template <class T>
 void Stack<T>::setCapacity(const int newCapacity) {
+	// Note that if newCapacity is less than size the difference will be removed from the top of the Stack
 	T * temp = new T[newCapacity];
 	// Copy the old stack into the new one
 	int copying = 0;
